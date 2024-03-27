@@ -68,6 +68,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 10
+  pickupParticle: {fileID: 6384697455450861413, guid: 8abf0144554b67848b61e527be42c87d,
+    type: 3}
 --- !u!1001 &5258803621301977763
 PrefabInstance:
   m_ObjectHideFlags: 0

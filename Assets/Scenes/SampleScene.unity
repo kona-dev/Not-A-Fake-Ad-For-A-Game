@@ -290,6 +290,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &878170263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 878170264}
+  m_Layer: 0
+  m_Name: Pieces
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &878170264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878170263}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,15 +610,30 @@ MonoBehaviour:
   - {fileID: 8481755674697068754, guid: c363f26e3d6643840893eab438f9b4f9, type: 3}
   - {fileID: 8481755674697068754, guid: 8fa7fa878f2baf146b708f8bcd5d9f0b, type: 3}
   - {fileID: 8481755674697068754, guid: de943690ed82032499504e0bf137dceb, type: 3}
-  speed: 10
+  speed: 18
   currentPlacedObjects: []
-  currentPlacedPickups:
-  - {fileID: 0}
+  objectParent: {fileID: 878170263}
+  currentPlacedPickups: []
+  barrierPrefab: {fileID: 7318934933511809877, guid: 1647e9e015aadb34f826640b9b962507,
+    type: 3}
+  patterns:
+  - {fileID: 2815201632700444579, guid: d6874409c847a41408e648d041e4e61e, type: 3}
+  - {fileID: 7833802060180154961, guid: 48fa56ffd196e054cb2fc152ed805af2, type: 3}
+  - {fileID: 1969060135167861910, guid: 7da0febf8a56ebf47af3c1e28026703e, type: 3}
+  - {fileID: 7338396101983637179, guid: 3a1860a6ee127274ebac91e38befbd79, type: 3}
+  - {fileID: 6143208594122588815, guid: 7d3a813620ae1dc4bb8f0bd4ba1d1302, type: 3}
+  - {fileID: 7338396101983637179, guid: 2037e83bab4905a41b3cbed0b1eda6cd, type: 3}
+  - {fileID: 7338396101983637179, guid: 664e855d401e8f54d9b73ddfd6b7d77c, type: 3}
+  - {fileID: 7338396101983637179, guid: 875f6f236db838140901ef41d4c4409d, type: 3}
+  - {fileID: 7338396101983637179, guid: 1d85e386671ccaa49b91e6569330e0ba, type: 3}
   isActive: 0
   start: 0
   testSpawn: 1
   spawnX: -400
   despawnX: 400
+  distDiff: 0
+  isMakingPattern: 0
+  currentPattern: 
 --- !u!1 &1284930047
 GameObject:
   m_ObjectHideFlags: 3
@@ -759,7 +805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e3a79fa24f2794ebb907a24fed9992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 17
+  speed: 25
   basePosition: {x: 0, y: 0, z: 0}
   radius: 2
   pawns: []
@@ -873,3 +919,4 @@ SceneRoots:
   - {fileID: 1585960678}
   - {fileID: 1215193680}
   - {fileID: 1693393631}
+  - {fileID: 878170264}
