@@ -9,7 +9,7 @@ public class Pickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collided");
+      
         if (other.CompareTag("Player"))
         {
             FindObjectOfType<GameManager>().AddCoins(value);

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class RoadGenerator : MonoBehaviour
@@ -14,7 +15,8 @@ public class RoadGenerator : MonoBehaviour
     [SerializeField] public GameObject objectParent;
     [SerializeField] public List<GameObject> currentPlacedPickups = new List<GameObject>();
 
-    [SerializeField] public GameObject barrierPrefab;
+    [SerializeField] public GameObject leftBarrierPrefab;
+    [SerializeField] public GameObject rightBarrierPrefab;
 
     [SerializeField] public List<GameObject> patterns = new List<GameObject>();
 
@@ -29,20 +31,35 @@ public class RoadGenerator : MonoBehaviour
     [SerializeField] public float distDiff;
     [SerializeField] public bool isMakingPattern;
     [SerializeField] public List<int> currentPattern;
+
+    [SerializeField] public float timeGenerated;
+    [SerializeField] public float defaultSpawnTimer;
+    [SerializeField] public float spawnTimer;
+    [SerializeField] public float gameScale;
+
+    [SerializeField] public List<GameObject> enemyPrefabs = new List<GameObject>();
+
+    private int repeatPickup;
+    private int repeatBarrier;
    
     private void Start()
     {
         currentPlacedObjects.Clear();
         isActive = false;
         isMakingPattern = false;
+        repeatBarrier = 0;
+        repeatPickup = 0;
+        gameScale = 1;
     }
 
     private void Update()
     {
-      
+       
+
        if (isActive)
        {
-            
+            timeGenerated += Time.deltaTime;
+            gameScale = 1 + (timeGenerated / 20);
             /* Road Generation */ {
 
 
@@ -71,6 +88,18 @@ public class RoadGenerator : MonoBehaviour
                     if (currentPattern.Count == 0)
                     {
                         bool doPickupOrBarrier = Random.Range(1, 3) == 1 ? true : false;
+                        if (repeatBarrier >= 2)
+                        {
+                            doPickupOrBarrier = true;
+                            repeatBarrier = 0;
+                            repeatPickup = 0;
+                        }
+                        if (repeatPickup >= 2)
+                        {
+                            doPickupOrBarrier = false;
+                            repeatPickup = 0;
+                            repeatBarrier = 0;
+                        }
                         if (doPickupOrBarrier)
                         {
                             currentPattern = CreatePickupPattern();
@@ -78,14 +107,25 @@ public class RoadGenerator : MonoBehaviour
                             GameObject temp = Instantiate(patterns[currentPattern[0]], new Vector3(spawnX, 0, 0), patterns[currentPattern[0]].transform.rotation);
                             foreach (Transform pickup in temp.transform) currentPlacedPickups.Add(pickup.gameObject);
                             currentPattern.RemoveAt(0);
+                            repeatPickup++;
                         }
                         else
                         {
                             bool leftOrRight = Random.Range(1, 3) == 1 ? true : false;
                             GameObject temp;
-                            if (leftOrRight) {  temp = Instantiate(barrierPrefab, new Vector3(spawnX, 0, -5f), barrierPrefab.transform.rotation);  }
-                            else { temp = Instantiate(barrierPrefab, new Vector3(spawnX, 0, 5f), barrierPrefab.transform.rotation); }
+                            bool flip = Random.Range(1, 3) == 1 ? true : false;
+                            if (leftOrRight) 
+                            { 
+                                if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(spawnX, 0, -5f), leftBarrierPrefab.transform.rotation);
+                                else temp = Instantiate(rightBarrierPrefab, new Vector3(spawnX, 0, -5f), rightBarrierPrefab.transform.rotation);
+                            }
+                            else 
+                            {
+                                if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(spawnX, 0, 5f), rightBarrierPrefab.transform.rotation);
+                                else temp = Instantiate(rightBarrierPrefab, new Vector3(spawnX, 0, -5f), rightBarrierPrefab.transform.rotation);
+                            }
                             currentPlacedPickups.Add(temp);
+                            repeatBarrier++;
                         }
                     }
                     else if (currentPattern.Count > 0)
@@ -110,6 +150,26 @@ public class RoadGenerator : MonoBehaviour
                 }
             }
 
+
+            /* Enemy Generation */ {
+                spawnTimer += Time.deltaTime;
+                float spawn = defaultSpawnTimer / gameScale > 0.25f ? (defaultSpawnTimer / gameScale) : 0.25f;
+                if (spawnTimer >= spawn )
+                {
+                    spawnTimer = 0;
+
+                    int enemiesToSpawn = (int)Mathf.Floor(Random.Range(0, (gameScale * 2)) + gameScale);
+                    float z = Random.Range(-8f, 8f);
+                    for (int i = 0; i < enemiesToSpawn; i++)
+                    {
+                        Instantiate(enemyPrefabs[0], new Vector3(spawnX + 200 + Random.Range(-1f, 1f), -3.5f, z + Random.Range(-1f, 1f)), enemyPrefabs[0].transform.rotation);
+                    }
+                    
+                    
+                }
+            
+
+            }
        }
 
             if (testSpawn) TestSpawn();
@@ -163,16 +223,67 @@ public class RoadGenerator : MonoBehaviour
     {
         Reset();
 
+        /* Setup Roads */
         for(int i = 0; i < (despawnX - spawnX) / 25; i++)
         {
             SpawnPiece(GetRandomPiece(), -spawnX - (i * 25) - 25);
         }
 
-        for(int i = 0; i < (-50 + spawnX) / 25; i++)
+        /* Generate Starting Road Objects */
+        for(int i = 0; i <  Mathf.Abs((-50 + spawnX) / 25) - 2 ; i++)
         {
-
+            if (currentPattern.Count == 0)
+            {
+                bool doPickupOrBarrier = Random.Range(1, 3) == 1 ? true : false;
+                if (repeatBarrier >= 2)
+                {
+                    doPickupOrBarrier = true;
+                    repeatBarrier = 0;
+                    repeatPickup = 0;
+                }
+                if (repeatPickup >= 2)
+                {
+                    doPickupOrBarrier = false;
+                    repeatPickup = 0;
+                    repeatBarrier = 0;
+                }
+                if (doPickupOrBarrier)
+                {
+                    currentPattern = CreatePickupPattern();
+                    foreach (var x in currentPattern) Debug.Log(x);
+                    GameObject temp = Instantiate(patterns[currentPattern[0]], new Vector3(0 - (i * 25) - 25, 0, 0), patterns[currentPattern[0]].transform.rotation);
+                    foreach (Transform pickup in temp.transform) currentPlacedPickups.Add(pickup.gameObject);
+                    currentPattern.RemoveAt(0);
+                    repeatPickup++;
+                }
+                else
+                {
+                    bool leftOrRight = Random.Range(1, 3) == 1 ? true : false;
+                    GameObject temp;
+                    bool flip = Random.Range(1, 3) == 1 ? true : false;
+                    if (leftOrRight)
+                    {
+                        if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(0 - (i * 25) - 25, 0, -5f), leftBarrierPrefab.transform.rotation);
+                        else temp = Instantiate(rightBarrierPrefab, new Vector3(0 - (i * 25) - 25, 0, 5f), rightBarrierPrefab.transform.rotation);
+                    }
+                    else
+                    {
+                        if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(0 - (i * 25) - 25, 0, -5f), leftBarrierPrefab.transform.rotation);
+                        else temp = Instantiate(rightBarrierPrefab, new Vector3(0 - (i * 25) - 25, 0, 5f), rightBarrierPrefab.transform.rotation);
+                    }
+                    currentPlacedPickups.Add(temp);
+                    repeatBarrier++;
+                }
+            }
+            else if (currentPattern.Count > 0)
+            {
+                GameObject temp = Instantiate(patterns[currentPattern[0]], new Vector3(0 - (i * 25) - 25, 0, 0), patterns[currentPattern[0]].transform.rotation);
+                foreach (Transform pickup in temp.transform) currentPlacedPickups.Add(pickup.gameObject);
+                currentPattern.RemoveAt(0);
+            }
         }
 
+        isActive = true;
     }
 
     public void TestSpawn()

@@ -3,16 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - EnemyBarrier
+  - EnemyDetector
+  - Enemy
+  - Projectile
+  - PowerUp
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - EnemyBarrier
   - Water
   - UI
-  - 
-  - 
+  - Enemy
+  - Projectile
   - 
   - 
   - 
