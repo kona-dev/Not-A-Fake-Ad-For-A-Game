@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
 
         if (other.CompareTag("EnemyDetector"))
         {
-            if (!isDead) FindObjectOfType<GameManager>().RemoveHealth(1);
+            if (!isDead) FindObjectOfType<GameManager>().AddHealth(-1);
             Destroy(this.gameObject);
         }
         

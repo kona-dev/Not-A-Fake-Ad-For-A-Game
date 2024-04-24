@@ -118,12 +118,14 @@ public class RoadGenerator : MonoBehaviour
                             { 
                                 if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(spawnX, 0, -5f), leftBarrierPrefab.transform.rotation);
                                 else temp = Instantiate(rightBarrierPrefab, new Vector3(spawnX, 0, -5f), rightBarrierPrefab.transform.rotation);
+
                             }
                             else 
                             {
                                 if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(spawnX, 0, 5f), rightBarrierPrefab.transform.rotation);
                                 else temp = Instantiate(rightBarrierPrefab, new Vector3(spawnX, 0, -5f), rightBarrierPrefab.transform.rotation);
                             }
+                            temp.GetComponent<PowerUp>().Setup(temp.GetComponent<PowerUp>().GetRandomPowerUpType(), Mathf.FloorToInt(1 * gameScale), -Mathf.FloorToInt(1 * gameScale), true);
                             currentPlacedPickups.Add(temp);
                             repeatBarrier++;
                         }
@@ -271,6 +273,7 @@ public class RoadGenerator : MonoBehaviour
                         if (flip) temp = Instantiate(leftBarrierPrefab, new Vector3(0 - (i * 25) - 25, 0, -5f), leftBarrierPrefab.transform.rotation);
                         else temp = Instantiate(rightBarrierPrefab, new Vector3(0 - (i * 25) - 25, 0, 5f), rightBarrierPrefab.transform.rotation);
                     }
+                    temp.GetComponent<PowerUp>().Setup(temp.GetComponent<PowerUp>().GetRandomPowerUpType(), Mathf.FloorToInt(1), -Mathf.FloorToInt(1), true);
                     currentPlacedPickups.Add(temp);
                     repeatBarrier++;
                 }

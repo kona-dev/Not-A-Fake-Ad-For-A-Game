@@ -171,9 +171,11 @@ public class Player : MonoBehaviour
                 break;
             case PowerUpType.PAWNINCREASE:
                     IncreasePawns((int)Mathf.Floor(value));
+                Debug.Log("Increasing Pawns");
                 break;
             case PowerUpType.HEALTH:
                     FindAnyObjectByType<GameManager>().AddHealth(Mathf.FloorToInt(value));
+                    Debug.Log("Changing Health");
                 break;
 
         }

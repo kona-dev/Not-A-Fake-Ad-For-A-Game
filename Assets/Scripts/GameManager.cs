@@ -19,8 +19,6 @@ public class GameManager : MonoBehaviour
     }
 
     public void AddCoins(int value) { coins += value; }
-
-    public void RemoveHealth(int value) { health -= value; }
     public void AddHealth(int value) { health += value; }
 
 }

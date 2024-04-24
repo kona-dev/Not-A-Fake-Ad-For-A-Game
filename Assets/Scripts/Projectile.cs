@@ -11,7 +11,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] public float speed;
     void Start()
     {
-        speed = Random.Range(10f, 12.5f);
+        speed = Random.Range(15f, 22.5f);
     }
 
     // Update is called once per frame

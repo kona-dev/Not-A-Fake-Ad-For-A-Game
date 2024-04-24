@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
-  lifeTime: 8
+  lifeTime: 4
   deathParticle: {fileID: 4986524852877061872, guid: 2677dbc733e487f4c967df123113d666,
     type: 3}
   speed: 0

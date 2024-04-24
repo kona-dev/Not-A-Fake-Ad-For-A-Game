@@ -20,7 +20,7 @@ public class PowerUp : MonoBehaviour
 
     private void Start()
     {
-        Setup(PowerUpType.ATTACKSPEED, 2, -2, true);
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,13 +31,15 @@ public class PowerUp : MonoBehaviour
             bool isPlayerOnLeftOrRight = middle.transform.position.z > other.transform.position.z ? true : false;
             if (isPlayerOnLeftOrRight)
             {
-                if (leftOrRight) other.GetComponent<Player>().ApplyPowerUP(powerUpType, positiveValue, addOrMultiply);
+                if (leftOrRight) other.GetComponent<Player>().ApplyPowerUP(powerUpType, positiveValue, addOrMultiply); 
                 else other.GetComponent<Player>().ApplyPowerUP(powerUpType, negativeValue, addOrMultiply);
+                Debug.Log("Applying Powerup");
             }
             else
             {
                 if (leftOrRight) other.GetComponent<Player>().ApplyPowerUP(powerUpType, negativeValue, addOrMultiply);
                 else other.GetComponent<Player>().ApplyPowerUP(powerUpType, positiveValue, addOrMultiply);
+                Debug.Log("Applying Powerup");
             }
           
             if(isPlayerOnLeftOrRight) { Debug.Log("LEFT"); } else { Debug.Log("RIGHT");  }
@@ -50,9 +52,30 @@ public class PowerUp : MonoBehaviour
     public void Setup(PowerUpType powerUpType, float positiveValue, float negativeValue, bool addOrMultiply)
     {
         this.positiveValue = positiveValue;
+        Debug.Log(positiveValue);
         this.negativeValue = negativeValue;
+        Debug.Log(negativeValue);
         this.addOrMultiply = addOrMultiply;
+        this.powerUpType = powerUpType;
 
-        powerUpDisplay.CreateDisplay(powerUpType, leftOrRight, positiveValue, negativeValue, addOrMultiply);
+        if (powerUpType == PowerUpType.PAWNINCREASE)
+        {
+            this.positiveValue = 1;
+            this.negativeValue = -1;
+        }
+
+        powerUpDisplay.CreateDisplay(powerUpType, leftOrRight, this.positiveValue, this.negativeValue, addOrMultiply);
+    }
+
+    public PowerUpType GetRandomPowerUpType()
+    {
+        switch (Random.Range(1, 5))
+        {
+            case 1: return PowerUpType.ATTACKSPEED;
+            case 2: return PowerUpType.PAWNINCREASE;
+            case 3: return PowerUpType.DAMAGE;
+            case 4: return PowerUpType.HEALTH;
+            default: return PowerUpType.ATTACKSPEED;
+        }
     }
 }
